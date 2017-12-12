@@ -1,0 +1,5 @@
+spring:
+    application.name: vault-application
+    cloud.vault:
+        token: 4c2a2bc6-5def-b182-133f-35b719b63faf
+        scheme: http

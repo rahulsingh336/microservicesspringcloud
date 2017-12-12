@@ -1,0 +1,40 @@
+
+jar {
+	baseName = 'accountservice'
+	version =  '0.1.0'
+}
+
+/*
+task buildDocker(type: Docker, dependsOn: build) {
+	//push = true
+	applicationName = jar.baseName
+	dockerfile = file('src/main/resources/docker/Dockerfile')
+	doFirst {
+		copy {
+			from jar
+			into stageDir
+		}
+	}
+}
+*/
+
+task buildDocker(type: Docker, dependsOn: build) {
+	baseImage = 'openjdk:8-jdk-alpine'
+	//tag = 'myrepo/testmessages'
+	//push = project.hasProperty('push')
+	push
+	tag = 'microservicesrepo/dockermiccroservices'
+	addFile {
+		from jar
+		rename {'app.jar'}
+	}
+	exposePort 8080
+	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
+
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web")
+	//compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+	//testCompile("org.springframework.boot:spring-boot-starter-test")
+}
